@@ -69,48 +69,4 @@ function draw(t){
   X.clearRect(0,0,W,Hh);
   const g=X.createRadialGradient(cx,cy,Rr*.92,cx,cy,Rr*1.4);g.addColorStop(0,rgba('arc',.2));g.addColorStop(1,rgba('arc',0));
   X.fillStyle=g;X.beginPath();X.arc(cx,cy,Rr*1.4,0,7);X.fill();
-  X.strokeStyle=rgba('dot',.4);X.lineWidth=1;X.beginPath();X.arc(cx,cy,Rr,0,7);X.stroke();
-  for(const v of dots){const q=rot(v);if(q[2]<=0)continue;const s=v[3]?2.2:1.1;X.fillStyle=rgba('dot',v[3]?.3+.7*q[2]:.04+.2*q[2]);X.fillRect(cx+Rr*q[0]-s/2,cy-Rr*q[1]-s/2,s,s);}
-  routes.forEach((r,i)=>{
-    const on=i===sel,hi=((t/9000+r.o)%1)*80,P2=r.pts.map(P);
-    X.lineWidth=on?2:1;X.strokeStyle=rgba(on?'acc':'arc',on?.75:.3);X.beginPath();
-    let pen=false;P2.forEach(p=>{if(vis(p[3])){pen?X.lineTo(p[0],p[1]):X.moveTo(p[0],p[1]);pen=true}else pen=false});X.stroke();
-    const f=Math.floor(hi);
-    for(let k=Math.max(1,f-18);k<=f;k++){const a=P2[k-1],b=P2[k];if(!vis(a[3])||!vis(b[3]))continue;
-      X.strokeStyle=rgba('acc',(1-(hi-k)/18)*.9);X.lineWidth=2.2;X.beginPath();X.moveTo(a[0],a[1]);X.lineTo(b[0],b[1]);X.stroke();}
-    const h=P2[f];if(vis(h[3])){X.fillStyle=rgba('acc',1);X.shadowColor=rgba('acc',1);X.shadowBlur=12;X.beginPath();X.arc(h[0],h[1],3,0,7);X.fill();X.shadowBlur=0;}
-  });
-  const lab=[],pr=m=>m[2]?2:m[3]===sel?1:0;
-  [[H,A,1,-1],...routes.map((r,i)=>[r.d,r.B,0,i])].sort((a,b)=>pr(b)-pr(a)).forEach(([c,v,home],i)=>{
-    const p=P(v);if(p[2]<=0)return;
-    const pl=(t/1400+i*.31)%1;
-    X.strokeStyle=rgba('acc',(1-pl)*.6);X.lineWidth=1.2;X.beginPath();X.arc(p[0],p[1],3+pl*(home?18:11),0,7);X.stroke();
-    X.fillStyle=rgba('acc',1);X.beginPath();X.arc(p[0],p[1],home?4.5:3.2,0,7);X.fill();
-    if(!lab.some(l=>Math.abs(l[0]-p[0])<30&&Math.abs(l[1]-p[1])<14)){lab.push(p);X.globalAlpha=Math.min(1,p[2]*2.5);X.fillStyle=fg;X.font=`600 ${home?13:11}px system-ui,sans-serif`;X.fillText(c[0],p[0]+9,p[1]-8);X.globalAlpha=1;}
-  });
-}
-let last=0;
-function frame(t){
-  const dt=t-last;last=t;
-  if(tgt){lam+=ang(tgt.l-lam)*.06;pt+=(tgt.p-pt)*.06;}
-  else if(!drag&&sel<0&&!calm)lam+=dt*.00012;
-  draw(t);requestAnimationFrame(frame);
-}
-function pick(i){
-  sel=sel===i?-1:i;
-  nav.querySelectorAll('button').forEach((b,k)=>b.classList.toggle('on',k===sel));
-  if(sel<0){tgt=null;info.textContent=hint;return;}
-  const r=routes[sel],m=[A[0]+r.B[0],A[1]+r.B[1],A[2]+r.B[2]];
-  tgt={l:Math.atan2(m[0],m[2]),p:Math.atan2(m[1],Math.hypot(m[0],m[2]))*.9};
-  info.textContent=`${r.d[1]} · ${Math.round(r.km).toLocaleString('he-IL')} ק״מ בקו ישר · כ־${Math.round(r.km/880+.5)} שעות טיסה (הערכה)`;
-}
-D.forEach((d,i)=>{const b=document.createElement('button');b.textContent=d[1]+' · '+d[0];b.onclick=()=>pick(i);nav.append(b);});
-C.addEventListener('pointerdown',e=>{drag=true;tgt=null;px=e.clientX;py=e.clientY;C.setPointerCapture(e.pointerId);C.style.cursor='grabbing';});
-C.addEventListener('pointermove',e=>{if(!drag)return;lam-=(e.clientX-px)/Rr;pt=Math.max(-1.2,Math.min(1.2,pt+(e.clientY-py)/Rr));px=e.clientX;py=e.clientY;});
-addEventListener('pointerup',()=>{drag=false;C.style.cursor='grab';});
-addEventListener('resize',size);
-matchMedia('(prefers-color-scheme:dark)').addEventListener('change',theme);
-size();theme();requestAnimationFrame(frame);
-</script>
-</body>
-</html>
+  X.strokeStyle=rgba('dot',.4);X.lineWidth=1;X
